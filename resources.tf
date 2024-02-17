@@ -2,6 +2,7 @@ resource "kubernetes_namespace" "ns" {
   for_each = local.namespaces
   metadata {
     annotations = { name = each.value }
+    label       = var.labels
     name        = each.value
   }
 }
