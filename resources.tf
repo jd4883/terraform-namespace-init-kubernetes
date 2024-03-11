@@ -27,13 +27,11 @@ resource "kubernetes_role_binding" "role_binding" {
 }
 
 resource "kubernetes_secret" "docker_config" {
-  for_each = toset(concat(keys(local.namespaces), ["kube-system", "default"]))
+  for_each = toset(concat(keys(local.namespaces), var.skip_ns))
   metadata {
     name      = "docker-cfg"
     namespace = each.value
   }
-  data = {
-    ".dockerconfigjson" = file(pathexpand("~/.docker/config.json"))
-  }
+  data = { ".dockerconfigjson" = var.docker_config }
   type = "kubernetes.io/dockerconfigjson"
 }
